@@ -55,31 +55,31 @@ class _WeatherSearchPageState extends State<WeatherSearchPage> {
     );
   }
 
-  Widget buildColumnWithData(Weather weather) {
-    return const Center(
-      child: Text('Good job'),
-    );
-  }
-  // Column buildColumnWithData(Weather weather) {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //     children: <Widget>[
-  //       Text(
-  //         weather.cityName,
-  //         style: const TextStyle(
-  //           fontSize: 40,
-  //           fontWeight: FontWeight.w700,
-  //         ),
-  //       ),
-  //       Text(
-  //         // Display the temperature with 1 decimal place
-  //         "${weather.temperatureCelsius.toStringAsFixed(1)} °C",
-  //         style: const TextStyle(fontSize: 80),
-  //       ),
-  //       const CityInputField(),
-  //     ],
+  // Widget buildColumnWithData(Weather weather) {
+  //   return const Center(
+  //     child: Text('Good job'),
   //   );
   // }
+  Column buildColumnWithData(Weather weather) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Text(
+          weather.condition,
+          style: const TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          // Display the temperature with 1 decimal place
+          "${weather.temperatureCelcius.toStringAsFixed(1)} °C",
+          style: const TextStyle(fontSize: 80),
+        ),
+        CityInputField(),
+      ],
+    );
+  }
 }
 
 class CityInputField extends StatelessWidget {

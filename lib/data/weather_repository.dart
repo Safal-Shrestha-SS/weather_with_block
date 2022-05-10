@@ -10,8 +10,7 @@ class RealWeatherRepository implements WeatherRepository {
   final WeatherAPI w = WeatherAPI();
   @override
   Future<Weather> fetchWeather(double latitude, double longitude) async {
-    // Simulate network delay
     final val = await w.getWeather(latitude, longitude);
-    return Weather(condition: 'af', lat: 4, long: 8, temperatureCelcius: 5);
+    return val;
   }
 }
