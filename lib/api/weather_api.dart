@@ -10,7 +10,7 @@ class WeatherAPI {
   Future<Weather> getWeather(double lat, double long) async {
     try {
       final weather = await dio.get(
-          'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&units=metric&appid=bcdf3cc9e06b6bd2f50a0712ed96e440');
+          'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&units=metric&appid={api_key}');
       final weatherModel = Weather.fromJson(weather.data);
       return weatherModel;
     } on Exception {
