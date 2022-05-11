@@ -1,6 +1,9 @@
 # weather
 
-A new Flutter project.
+A  Flutter project.
+In order to run this project, You should replace api key on main/lib/api/weather_api.dart with your own api key obtained from https://openweathermap.org/.
+This project make use of cubit and repository pattern
+
 
 ## Getting Started
 
