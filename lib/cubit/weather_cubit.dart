@@ -12,14 +12,26 @@ class WeatherCubit extends Cubit<WeatherState> {
   final WeatherRepository _weatherRepository;
   WeatherCubit(this._weatherRepository) : super(const WeatherInitial());
   Future<void> getWeather() async {
-   
     try {
       emit(const WeatherLoading());
-      try{
-         await _weatherRepository.checkPermission();
-      }on Exception catch(e){
-        emit(PermissionError())}
-      await _weatherRepository.checkPermission();
+      try {
+        await _weatherRepository.checkLocationService();
+        try {
+          await _weatherRepository.checkPermission();
+          try {
+            await _weatherRepository.checkNetwork();
+          } on Exception {
+            emit(NetworkError());
+            return;
+          }
+        } on Exception {
+          emit(PermissionError());
+          return;
+        }
+      } on Exception {
+        emit(LocationError());
+        return;
+      }
       final weather = await _weatherRepository.fetchWeather();
       emit(WeatherLoaded(weather));
     } on Exception catch (e) {

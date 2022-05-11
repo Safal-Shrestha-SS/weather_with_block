@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_settings/open_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:weather/cubit/weather_cubit.dart';
 
 import '../data/model/weather.dart';
@@ -29,6 +31,36 @@ class _WeatherSearchPageState extends State<WeatherSearchPage> {
               action: SnackBarAction(
                 label: 'Undo',
                 onPressed: () {},
+              ),
+            ));
+          } else if (state is PermissionError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Go to App Permission'),
+              action: SnackBarAction(
+                label: 'OK',
+                onPressed: () async {
+                  await openAppSettings();
+                },
+              ),
+            ));
+          } else if (state is LocationError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Go to location'),
+              action: SnackBarAction(
+                label: 'OK',
+                onPressed: () async {
+                  await OpenSettings.openLocationSourceSetting();
+                },
+              ),
+            ));
+          } else if (state is NetworkError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('No network detected'),
+              action: SnackBarAction(
+                label: 'OK',
+                onPressed: () async {
+                  await OpenSettings.openWIFISetting();
+                },
               ),
             ));
           }

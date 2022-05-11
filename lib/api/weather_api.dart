@@ -1,6 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../data/model/weather.dart';
@@ -21,7 +20,7 @@ class WeatherAPI {
 }
 
 class GeoLocationService {
-  Future<void> checkPermissions() async {
+  Future<void> checkLocationService() async {
     final serviceStatus = await Permission.locationWhenInUse.serviceStatus;
     final isGpsOn = serviceStatus.isEnabled;
     if (!isGpsOn) {
@@ -29,6 +28,10 @@ class GeoLocationService {
           'Turn on location services before requesting permission.');
     }
 
+    return;
+  }
+
+  Future<void> checkPermissions() async {
     final status = await Permission.locationWhenInUse.request();
     if (status == PermissionStatus.granted) {
       return;
@@ -36,9 +39,8 @@ class GeoLocationService {
       throw Exception('Permission denied.');
     } else if (status == PermissionStatus.permanentlyDenied) {
       throw Exception();
-      await openAppSettings();
+      // await openAppSettings();
     }
-    return;
   }
 
   Future<void> connectionStatus() async {
@@ -48,20 +50,11 @@ class GeoLocationService {
     } else if (connectivityResult == ConnectivityResult.wifi) {
       return;
     } else if (connectivityResult == ConnectivityResult.none) {
-      await OpenSettings.openWIFISetting()
-          .timeout(const Duration(milliseconds: 10000), onTimeout: () async {
-        var connectivityResult = await (Connectivity().checkConnectivity());
-        if (connectivityResult == ConnectivityResult.wifi) {
-          return;
-        }
-        throw Exception("You didn't turn on your network.Try again");
-      });
-      return;
+      throw Exception("You didn't turn on your network.Try again");
     }
   }
 
   Future<Position> getLocation() async {
-    await connectionStatus();
     try {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.reduced,

@@ -6,6 +6,8 @@ import 'model/weather.dart';
 abstract class WeatherRepository {
   Future<Weather> fetchWeather();
   Future<void> checkPermission();
+  Future<void> checkLocationService();
+  Future<void> checkNetwork();
 }
 
 class RealWeatherRepository implements WeatherRepository {
@@ -21,5 +23,15 @@ class RealWeatherRepository implements WeatherRepository {
   @override
   Future<void> checkPermission() async {
     await geo.checkPermissions();
+  }
+
+  @override
+  Future<void> checkLocationService() async {
+    await geo.checkLocationService();
+  }
+
+  @override
+  Future<void> checkNetwork() async {
+    await geo.connectionStatus();
   }
 }
