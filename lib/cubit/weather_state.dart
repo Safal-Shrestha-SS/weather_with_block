@@ -43,3 +43,6 @@ class WeatherError extends WeatherState {
   @override
   int get hashCode => errorMessage.hashCode;
 }
+
+class LocationError extends WeatherState{}
+class PermissionError extends WeatherState{}

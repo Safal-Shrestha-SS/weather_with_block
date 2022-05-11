@@ -12,7 +12,7 @@ class Weather {
     return Weather(
         lat: double.parse((json['coord']['lat']).toString()),
         long: double.parse((json['coord']['lon']).toString()),
-        temperatureCelcius: json['main']['temp'],
+        temperatureCelcius: (json['main']['temp']),
         condition: json['weather'][0]['main']);
   }
 }

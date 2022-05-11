@@ -11,14 +11,19 @@ part 'weather_state.dart';
 class WeatherCubit extends Cubit<WeatherState> {
   final WeatherRepository _weatherRepository;
   WeatherCubit(this._weatherRepository) : super(const WeatherInitial());
-  Future<void> getWeather(double lat, double long) async {
+  Future<void> getWeather() async {
+   
     try {
       emit(const WeatherLoading());
-
-      final weather = await _weatherRepository.fetchWeather(lat, long);
+      try{
+         await _weatherRepository.checkPermission();
+      }on Exception catch(e){
+        emit(PermissionError())}
+      await _weatherRepository.checkPermission();
+      final weather = await _weatherRepository.fetchWeather();
       emit(WeatherLoaded(weather));
-    } on Exception {
-      emit(const WeatherError('Network Error'));
+    } on Exception catch (e) {
+      emit(WeatherError(e.toString()));
     }
   }
 }

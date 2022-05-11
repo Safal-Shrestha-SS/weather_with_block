@@ -26,6 +26,10 @@ class _WeatherSearchPageState extends State<WeatherSearchPage> {
           if (state is WeatherError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(state.errorMessage),
+              action: SnackBarAction(
+                label: 'Undo',
+                onPressed: () {},
+              ),
             ));
           }
         }, builder: (context, state) {
@@ -44,7 +48,7 @@ class _WeatherSearchPageState extends State<WeatherSearchPage> {
   }
 
   Widget buildInitialInput() {
-    return Center(
+    return const Center(
       child: CityInputField(),
     );
   }
@@ -55,11 +59,6 @@ class _WeatherSearchPageState extends State<WeatherSearchPage> {
     );
   }
 
-  // Widget buildColumnWithData(Weather weather) {
-  //   return const Center(
-  //     child: Text('Good job'),
-  //   );
-  // }
   Column buildColumnWithData(Weather weather) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -76,61 +75,35 @@ class _WeatherSearchPageState extends State<WeatherSearchPage> {
           "${weather.temperatureCelcius.toStringAsFixed(1)} °C",
           style: const TextStyle(fontSize: 80),
         ),
-        CityInputField(),
+        const CityInputField(),
       ],
     );
   }
 }
 
 class CityInputField extends StatelessWidget {
-  CityInputField({Key? key}) : super(key: key);
-  final myController1 = TextEditingController();
-  final myController2 = TextEditingController();
+  const CityInputField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: Column(
-        children: [
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: myController1,
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-              hintText: "Enter a latitude",
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-          ),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: myController2,
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-              hintText: "Enter a longitude",
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.red, // background
-              onPrimary: Colors.white, // foreground
-            ),
-            onPressed: () {
-              submitCityName(context, double.parse(myController1.text),
-                  double.parse(myController2.text));
-            },
-            child: const Text('Get'),
-          )
-        ],
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.red, // background
+          onPrimary: Colors.white, // foreground
+        ),
+        onPressed: () {
+          submitCityName(context);
+        },
+        child: const Text('Get'),
       ),
     );
   }
 
-  void submitCityName(BuildContext context, double lat, double long) {
+  void submitCityName(BuildContext context) {
     final weatherCubit = context.read<WeatherCubit>();
-    weatherCubit.getWeather(lat, long);
+
+    weatherCubit.getWeather();
   }
 }
